@@ -32,13 +32,17 @@ config_vim () {
 # ---------- i3wm ---------- #
 
 config_i3 () {
-   # Back up the existing config file, if there is one
-   if [ -d "$HOME/.i3/config" ]; then
-       mv -b "$HOME/.i3/config" "$HOME/.i3/config.bkp"
-   fi
+    # Intall config deps
+    sudo apt install feh \
+        rofi
 
-   # Set the new config file
-   cp "$_CURR_DIR/.i3/config" "$HOME/.i3/config"
+    # Back up the existing config file, if there is one
+    if [ -d "$HOME/.i3/config" ]; then
+       mv -b "$HOME/.i3/config" "$HOME/.i3/config.bkp"
+    fi
+
+    # Set the new config file
+    cp "$_CURR_DIR/.i3/config" "$HOME/.i3/config"
 }
 
 inst_i3 () {
