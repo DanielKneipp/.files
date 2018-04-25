@@ -138,6 +138,28 @@ inst_i3_gaps () {
     echo_info "i3-gaps installed"
 }
 
+# ---------- tmux ---------- #
+
+inst_tmux () {
+    echo_info "Installing tmux"
+
+    # Install tmux and Tmux Plugin Manager
+    sudo apt install -y tmux \
+        && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm \
+        && echo_succ "Tmux installed" \
+        || on_error "Failed to install tmux"
+}
+
+config_tmux () {
+    echo_info "Configuring tmux"
+
+    # Put the config file in the right place
+    cp "$_CURR_DIR/.tmux.conf" "$HOME/.tmux.conf" \
+        && echo_succ "Configuration filed copied" \
+        || on_error "Failed to copy configuration file"
+
+    echo_info "tmux configured"
+}
 
 # -------------------------- #
 # ----- Main Workflows ----- #
@@ -146,6 +168,7 @@ inst_i3_gaps () {
 config_all () {
     echo_info "Configuring all"
     config_vim
+    config_tmux
     config_i3
     echo_info "All things configured"
 }
@@ -153,6 +176,7 @@ config_all () {
 inst_all () {
     echo_info "Installing all"
     inst_vim
+    inst_tmux
     inst_i3
     inst_i3_gaps
     echo_info "All things installed"
