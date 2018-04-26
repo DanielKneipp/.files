@@ -53,7 +53,7 @@ config_i3 () {
     echo_info "Configuring i3"
 
     # Intall config deps
-    sudo apt install feh \
+    sudo apt install -y feh \
         rofi \
         && echo_succ "Dependencies for i3 config installed" \
         || on_error "Failed to install i3 config dependencies"
@@ -66,9 +66,10 @@ config_i3 () {
     fi
 
     # Set the new config file
-    cp "$_CURR_DIR/.i3/config" "$home/.i3/config" \
-        && echo_succ "New $home/.i3/config file defined" \
-        || on_error "Failed to copy the new $home/.i3/config file"
+    mkdir -p "$HOME/.i3"
+    cp "$_CURR_DIR/.i3/config" "$HOME/.i3/config" \
+        && echo_succ "New $HOME/.i3/config file defined" \
+        || on_error "Failed to copy the new $HOME/.i3/config file"
 
     echo_info "i3 configured"
 }
@@ -78,9 +79,9 @@ inst_i3 () {
 
     /usr/lib/apt/apt-helper download-file http://debian.sur5r.net/i3/pool/main/s/sur5r-keyring/sur5r-keyring_2018.01.30_all.deb keyring.deb SHA256:baa43dbbd7232ea2b5444cae238d53bebb9d34601cc000e82f11111b1889078a \
         && sudo dpkg -i ./keyring.deb \
-        && sudo echo "deb http://debian.sur5r.net/i3/ $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) universe" >> /etc/apt/sources.list.d/sur5r-i3.list \
+        && sudo su -c "echo \"deb http://debian.sur5r.net/i3/ $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) universe\" >> /etc/apt/sources.list.d/sur5r-i3.list" \
         && sudo apt update \
-        && sudo apt install i3 \
+        && sudo apt install -y i3 \
         && echo_succ "i3 installed" \
         || on_error "Failed to install i3"
 }
@@ -89,7 +90,7 @@ inst_i3_gaps () {
     echo_info "Installing i3-gaps"
 
     # Install deps
-    sudo add-apt-repository ppa:aguignard/ppa \
+    sudo add-apt-repository -y ppa:aguignard/ppa \
         && sudo apt-get update \
         && sudo apt install -y libxcb1-dev \
             libxcb-keysyms1-dev \
@@ -115,12 +116,12 @@ inst_i3_gaps () {
     mkdir -p "$HOME/projects" \
         && cd "$HOME/projects" \
         && git clone https://www.github.com/Airblader/i3 i3-gaps \
-        && cd i3-gaps \
         && echo_succ "i3-gaps cloned into $HOME/projects" \
         || on_error "Failed to clone i3-gaps into $HOME/projects"
 
     # compile & install
-    autoreconf --force --install \
+    cd "$HOME/projects/i3-gaps"
+    autoreconf --force --install
     rm -rf build/
     mkdir -p build && cd build/
 
@@ -184,7 +185,9 @@ inst_all () {
 
 # Only config the programs
 main () {
-    config_all
+    inst_i3
+    inst_i3_gaps
+    config_i3
 }
 
 main

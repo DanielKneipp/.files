@@ -8,7 +8,7 @@ _GREEN="\033[1;32m"
 _YELLOW="\033[1;33m"
 _RED="\033[1;31m"
 
-alias errcho=">&2 echo"
+errcho() { echo "$@" 1>&2; }
 
 echo_info () {
     msg="$1"
