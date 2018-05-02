@@ -58,18 +58,18 @@ config_i3 () {
         && echo_succ "Dependencies for i3 config installed" \
         || on_error "Failed to install i3 config dependencies"
 
-    # Back up the existing config file, if there is one
-    if [ -d "$HOME/.i3/config" ]; then
-       mv -b "$HOME/.i3/config" "$HOME/.i3/config.bkp" \
-           && echo_succ "Original $HOME/.i3/config file backed" \
-           || on_error "Failed to create a backup of the existent $HOME/.i3/config"
+    # Back up the existing i3 folder, if there is one
+    if [ -d "$HOME/.i3" ]; then
+       mv -b "$HOME/.i3" "$HOME/.i3_bkp" \
+           && echo_succ "Original $HOME/.i3 folder backed up" \
+           || on_error "Failed to create a backup of the existent $HOME/.i3"
     fi
 
     # Set the new config file
-    mkdir -p "$HOME/.i3"
-    cp "$_CURR_DIR/.i3/config" "$HOME/.i3/config" \
-        && echo_succ "New $HOME/.i3/config file defined" \
-        || on_error "Failed to copy the new $HOME/.i3/config file"
+    mkdir -p "$HOME/Pictures/screenshots/"
+    cp "$_CURR_DIR/.i3" "$HOME/.i3" \
+        && echo_succ "New $HOME/.i3 folder defined" \
+        || on_error "Failed to copy the new $HOME/.i3 folder"
 
     echo_info "i3 configured"
 }
