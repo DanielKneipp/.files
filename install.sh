@@ -40,9 +40,9 @@ config_vim () {
         || on_error "Failed to install dependencies for vim config"
 
     git clone --depth=1 --recursive https://github.com/DanielKneipp/vimrc.git ~/.vim_runtime \
-     && sh ~/.vim_runtime/install_awesome_vimrc.sh \
-     && echo_succ "Vimrc downloaded and installed" \
-     || on_error "Failed to install vimrc"
+        && sh ~/.vim_runtime/install_awesome_vimrc.sh \
+        && echo_succ "Vimrc downloaded and installed" \
+        || on_error "Failed to install vimrc"
 
     echo_info "Vim configured"
 }
