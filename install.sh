@@ -41,9 +41,9 @@ config_vim () {
         || on_error "Failed to install dependencies for vim config"
 
     git clone --depth=1 --recursive https://github.com/DanielKneipp/vimrc.git ~/.vim_runtime \
-     && sh ~/.vim_runtime/install_awesome_vimrc.sh \
-     && echo_succ "Vimrc downloaded and installed" \
-     || on_error "Failed to install vimrc"
+        && sh ~/.vim_runtime/install_awesome_vimrc.sh \
+        && echo_succ "Vimrc downloaded and installed" \
+        || on_error "Failed to install vimrc"
 
     echo_info "Vim configured"
 }
@@ -54,21 +54,22 @@ config_i3 () {
     echo_info "Configuring i3"
 
     # Intall config deps
-    sudo apt install -y feh \
+    sudo apt install -y feh scrot \
         rofi \
         && echo_succ "Dependencies for i3 config installed" \
         || on_error "Failed to install i3 config dependencies"
 
     # Back up the existing i3 folder, if there is one
     if [ -d "$HOME/.i3" ]; then
-       mv -b "$HOME/.i3" "$HOME/.i3_bkp" \
-           && echo_succ "Original $HOME/.i3 folder backed up" \
-           || on_error "Failed to create a backup of the existent $HOME/.i3"
+        local suffix="$(cat /dev/urandom | tr -dc 'A-Z0-9' | fold -w 5 | head -n 1)"
+        mv "$HOME/.i3" "$HOME/.i3_bkp_$suffix" \
+            && echo_succ "Original $HOME/.i3 folder backed up" \
+            || on_error "Failed to create a backup of the existent $HOME/.i3"
     fi
 
     # Set the new config file
     mkdir -p "$HOME/Pictures/screenshots/"
-    cp "$_CURR_DIR/.i3" "$HOME/.i3" \
+    cp -r "$_CURR_DIR/.i3" "$HOME/.i3" \
         && echo_succ "New $HOME/.i3 folder defined" \
         || on_error "Failed to copy the new $HOME/.i3 folder"
 
@@ -186,8 +187,6 @@ inst_all () {
 
 # Only config the programs
 main () {
-    inst_i3
-    inst_i3_gaps
     config_i3
 }
 
