@@ -25,7 +25,7 @@ source "$_CURR_DIR/msg.sh" \
 
 inst_vim () {
     echo_info "Installing vim"
-    sudo apt install vim \
+    sudo apt install -y vim \
         && echo_succ "Vim installed" \
         || on_error "Failed to install Vim"
 }
@@ -35,7 +35,8 @@ config_vim () {
 
     # Installing deps
     # ctags: for tagbar plugin
-    sudo apt install -y ctags \
+    # silversearcher: for Ack
+    sudo apt install -y ctags silversearcher-ag \
         && echo_succ "Dependencies for vim config installed" \
         || on_error "Failed to install dependencies for vim config"
 
