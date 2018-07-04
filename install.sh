@@ -54,8 +54,7 @@ config_i3 () {
     echo_info "Configuring i3"
 
     # Intall config deps
-    sudo apt install -y feh scrot \
-        rofi \
+    sudo apt install -y feh scrot paman pavucontrol pavumeter paprefs pasystray rofi \
         && echo_succ "Dependencies for i3 config installed" \
         || on_error "Failed to install i3 config dependencies"
 

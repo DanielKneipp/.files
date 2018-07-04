@@ -180,7 +180,7 @@ hide_edge_borders both
 new_window normal
 new_float normal
 
-exec --no-startup-id feh --bg-scale /home/daniel/Pictures/pexels-photo.jpg
+# exec --no-startup-id feh --bg-scale /home/daniel/Pictures/pexels-photo.jpg
 #exec --no-startup-id compton
 
 # exec_always --no-startup-id $HOME/.config/polybar/launch.sh
@@ -190,7 +190,19 @@ bindsym $mod+d exec --no-startup-id rofi -show run
 
 # Startup programs
 exec --no-startup-id nm-applet
+exec --no-startup-id pasystray
 
 # Custom KeyBinds
 bindsym Control+$mod+l exec sh ~/.i3/i3lock.sh
 bindsym Print exec scrot '%Y-%m-%d-%T_$wx$h_scrot.png' -e 'mv $f ~/Pictures/screenshots/'
+
+# Go to the left and right workspaces
+bindsym $mod+Control+Left workspace prev
+bindsym $mod+Control+Right workspace next
+
+# Audio and spotify shortcuts
+bindsym $mod+mod1+Up exec "amixer -D pulse sset Master '5%+'"
+bindsym $mod+mod1+Down exec "amixer -D pulse sset Master '5%-'"
+bindsym $mod+mod1+p exec "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause" 
+bindsym $mod+mod1+Right exec "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next" 
+bindsym $mod+mod1+Left exec "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous"
