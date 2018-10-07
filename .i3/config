@@ -175,7 +175,7 @@ bar {
 }
 
 # To get gnome stuff (nautilus) to work
-exec gnome-settings-daemon
+exec --no-startup-id gnome-settings-daemon
 
 font pango: Ubuntu Mono 10
 
