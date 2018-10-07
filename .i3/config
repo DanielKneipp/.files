@@ -174,6 +174,9 @@ bar {
     }
 }
 
+# To get gnome stuff (nautilus) to work
+exec gnome-settings-daemon
+
 font pango: Ubuntu Mono 10
 
 hide_edge_borders both
