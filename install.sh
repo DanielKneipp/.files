@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# TODO: Test everything
+# NOTE: Tested with Ubuntu 16.04
 
 # -------------------------- #
 # ---- Global Variables ---- #
@@ -8,6 +8,34 @@
 
 # Path of this script
 _CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Specifies if the config folder was updated
+_DOTCONFIG_UPDATED=true
+
+# -------------------------- #
+# ---- Global Functions ---- #
+# -------------------------- #
+
+update_dotconfig () {
+    # Don't update more than once
+    if [[ $_DOTCONFIG_UPDATED ]]; then
+        return
+    fi
+    $_DOTCONFIG_UPDATED=true
+
+    # Back up the existing .config folder, if there is one
+    if [ -d "$HOME/.config" ]; then
+        local suffix="$(cat /dev/urandom | tr -dc 'A-Z0-9' | fold -w 5 | head -n 1)"
+        mv "$HOME/.config" "$HOME/.config_bkp_$suffix" \
+            && echo_succ "Original $HOME/.config folder backed up" \
+            || on_error "Failed to create a backup of the existent $HOME/.config"
+    fi
+
+    # Set the new config file
+    mkdir -p "$HOME/Pictures/screenshots/"
+    cp -r "$_CURR_DIR/.config" "$HOME/.config" \
+        && echo_succ "New $HOME/.config folder defined" \
+        || on_error "Failed to copy the new $HOME/.config folder"
+}
 
 # -------------------------- #
 # --- Including external --- #
@@ -36,7 +64,8 @@ config_vim () {
     # Installing deps
     # ctags: for tagbar plugin
     # silversearcher: for Ack
-    sudo apt install -y ctags silversearcher-ag \
+    # cmake: for YouCompleteMe
+    sudo apt install -y ctags silversearcher-ag cmake \
         && echo_succ "Dependencies for vim config installed" \
         || on_error "Failed to install dependencies for vim config"
 
@@ -163,6 +192,30 @@ config_tmux () {
     echo_info "tmux configured"
 }
 
+# ---------- fish ---------- #
+
+inst_fish () {
+    echo_info "Installing fish"
+
+    sudo apt install -y fish \
+        && echo_succ "fish installed" \
+        || on_error "Failed to install fish"
+}
+
+config_fish () {
+    echo_info "Configuring i3"
+
+    # Set fish as the default shell
+    chsh -s /usr/bin/fish \
+        && echo_succ "Fish is now the default shell" \
+        || echo_warn "Failed to set fish as the default shell"
+
+    # Update the .config file
+    update_dotconfig
+
+    echo_info "i3 configured"
+}
+
 # -------------------------- #
 # ----- Main Workflows ----- #
 # -------------------------- #
@@ -186,7 +239,9 @@ inst_all () {
 
 # Only config the programs
 main () {
-    config_i3
+    inst_fish
+    config_fish
+    config_tmux
 }
 
 main
