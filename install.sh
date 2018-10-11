@@ -9,7 +9,7 @@
 # Path of this script
 _CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Specifies if the config folder was updated
-_DOTCONFIG_UPDATED=true
+_DOTCONFIG_UPDATED=false
 
 # -------------------------- #
 # ---- Global Functions ---- #
@@ -17,22 +17,33 @@ _DOTCONFIG_UPDATED=true
 
 update_dotconfig () {
     # Don't update more than once
-    if [[ $_DOTCONFIG_UPDATED ]]; then
+    if [ "$_DOTCONFIG_UPDATED" = true ]; then
+	    echo_info ".config folder is already updated"
         return
     fi
-    $_DOTCONFIG_UPDATED=true
+    _DOTCONFIG_UPDATED=true
+	echo "Updating .config folder"
 
     # Back up the existing .config folder, if there is one
     if [ -d "$HOME/.config" ]; then
         local suffix="$(cat /dev/urandom | tr -dc 'A-Z0-9' | fold -w 5 | head -n 1)"
-        mv "$HOME/.config" "$HOME/.config_bkp_$suffix" \
+        echo_info "Backing up existent .config folder to ~/.config_bkp_$suffix"
+        cp -r "$HOME/.config" "$HOME/.config_bkp_$suffix" \
             && echo_succ "Original $HOME/.config folder backed up" \
             || on_error "Failed to create a backup of the existent $HOME/.config"
     fi
 
-    # Set the new config file
-    mkdir -p "$HOME/Pictures/screenshots/"
-    cp -r "$_CURR_DIR/.config" "$HOME/.config" \
+    # Installing rsync, if need it
+    if ! [ -x "$(command -v rsync)" ]; then
+        echo_info "Installing rsync (to sync folders)"
+        sudo apt install rsync \
+            && echo_succ "Rsync installed" \
+            || on_error "Failed to install rsync"
+    fi
+
+    echo_info "Starting update"
+    # Set the new config folder
+    rsync -avhu --progress "$_CURR_DIR/.config" "$HOME/"  \
         && echo_succ "New $HOME/.config folder defined" \
         || on_error "Failed to copy the new $HOME/.config folder"
 }
@@ -186,7 +197,7 @@ config_tmux () {
 
     # Put the config file in the right place
     cp "$_CURR_DIR/.tmux.conf" "$HOME/.tmux.conf" \
-        && echo_succ "Configuration filed copied" \
+        && echo_succ "Configuration file copied" \
         || on_error "Failed to copy configuration file"
 
     echo_info "tmux configured"
@@ -203,7 +214,7 @@ inst_fish () {
 }
 
 config_fish () {
-    echo_info "Configuring i3"
+    echo_info "Configuring fish"
 
     # Set fish as the default shell
     chsh -s /usr/bin/fish \
@@ -213,7 +224,7 @@ config_fish () {
     # Update the .config file
     update_dotconfig
 
-    echo_info "i3 configured"
+    echo_info "fish configured"
 }
 
 # -------------------------- #
@@ -239,7 +250,6 @@ inst_all () {
 
 # Only config the programs
 main () {
-    inst_fish
     config_fish
     config_tmux
 }
