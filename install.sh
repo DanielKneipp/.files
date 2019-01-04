@@ -259,6 +259,7 @@ config_all () {
     echo_info "Configuring all"
     config_vim
     config_tmux
+    config_fish
     config_i3
     echo_info "All things configured"
 }
@@ -267,6 +268,7 @@ inst_all () {
     echo_info "Installing all"
     inst_vim
     inst_tmux
+    inst_fish
     inst_i3
     inst_i3_gaps
     echo_info "All things installed"
@@ -274,6 +276,7 @@ inst_all () {
 
 # Only config the programs
 main () {
+    inst_fish
     config_fish
     config_tmux
 }
