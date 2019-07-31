@@ -239,6 +239,30 @@ config_git () {
     echo_info "git configured"
 }
 
+# --------- jupyter -------- #
+
+inst_jupyter () {
+    echo_info "Installing jupyter"
+
+    sudo pip install jupyter \
+        && echo_succ "Jupyter installed" \
+        || on_error "Failed to install jupyter"
+
+    # Install jupyter extensions
+    sudo pip install jupyter_nbextensions_configurator jupyterthemes jupyter_contrib_nbextensions \
+        && jupyter nbextensions_configurator enable --user \
+        && jupyter contrib nbextension install --user \
+        && echo_succ "Jupyter extensions installed" \
+        || on_error "Failed to install jupyte extensions"
+}
+
+config_jupyter () {
+    # Set theme
+    jt -t onedork -fs 95 -tfs 11 -nfs 95 -cellw 95% -T \
+        && echo_succ "Jupyter configured" \
+        || on_error "Failed to configure jupyter"
+}
+
 # -------------------------- #
 # ----- Main Workflows ----- #
 # -------------------------- #
@@ -250,6 +274,7 @@ config_all () {
     config_fish
     config_i3
     config_git
+    config_jupyter
     echo_info "All things configured"
 }
 
@@ -260,6 +285,7 @@ inst_all () {
     inst_fish
     inst_i3
     inst_i3_gaps
+    inst_jupyter
     echo_info "All things installed"
 }
 
