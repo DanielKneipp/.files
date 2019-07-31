@@ -227,6 +227,18 @@ config_fish () {
     echo_info "fish configured"
 }
 
+# ---------- git ---------- #
+
+config_git () {
+    echo_info "Configuring git"
+
+    cp "$_CURR_DIR/.gitconfig" "$HOME/.gitconfig" \
+        && echo_succ "Configuration file copied" \
+        || on_error "Failed to copy configuration file"
+
+    echo_info "git configured"
+}
+
 # -------------------------- #
 # ----- Main Workflows ----- #
 # -------------------------- #
@@ -237,6 +249,7 @@ config_all () {
     config_tmux
     config_fish
     config_i3
+    config_git
     echo_info "All things configured"
 }
 
