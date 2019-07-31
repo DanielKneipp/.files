@@ -193,7 +193,16 @@ set -g fish_color_git         $green
 # OTHER
 #
 
+set -x PATH $HOME/bin $PATH
+set -x PATH $HOME/.local/bin $PATH
 
 # cat ~/.cache/wal/sequences
 alias ll='ls -alF'
 set --erase fish_greeting
+
+# pyenv stuff
+set PYENV_ROOT $HOME/.pyenv
+set -x PATH $PYENV_ROOT/bin $PATH
+set -x PYENV_VIRTUALENV_DISABLE_PROMPT 1
+status --is-interactive; and pyenv init - | source
+status --is-interactive; and pyenv virtualenv-init - | source
