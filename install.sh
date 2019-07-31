@@ -239,6 +239,18 @@ config_git () {
     echo_info "git configured"
 }
 
+# ---------- ssh ---------- #
+
+config_ssh () {
+    echo_info "Configuring ssh"
+
+    rsync -avhu --progress "$_CURR_DIR/.ssh" "$HOME/" \
+        && echo_succ "Configuration file copied" \
+        || on_error "Failed to copy configuration file"
+
+    echo_info "ssh configured"
+}
+
 # --------- jupyter -------- #
 
 inst_jupyter () {
