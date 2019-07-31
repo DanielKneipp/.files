@@ -180,6 +180,23 @@ inst_i3_gaps () {
     echo_info "i3-gaps installed"
 }
 
+inst_i3_blocks () {
+    echo_info "Installing i3blocks"
+
+    sudo apt install -y i3blocks \
+        && echo_succ "i3blocks installed" \
+        || on_erro "Failed to install i3blocks"
+}
+
+config_i3_blocks () {
+    echo_info "Configuring i3blocks"
+
+    # Update the .config file
+    update_dotconfig
+
+    echo_info "i3blocks configured"
+}
+
 # ---------- tmux ---------- #
 
 inst_tmux () {
@@ -285,7 +302,9 @@ config_all () {
     config_tmux
     config_fish
     config_i3
+    config_i3_blocks
     config_git
+    config_ssh
     config_jupyter
     echo_info "All things configured"
 }
@@ -296,6 +315,7 @@ inst_all () {
     inst_tmux
     inst_fish
     inst_i3
+    inst_i3_blocks
     inst_i3_gaps
     inst_jupyter
     echo_info "All things installed"
