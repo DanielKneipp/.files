@@ -169,7 +169,7 @@ client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color      
 # finds out, if available)
 bar {
     position top
-    status_command i3blocks -c /home/daniel/.config/i3blocks/config 
+    status_command i3blocks -c /home/daniel/.config/i3blocks/config
     tray_output primary
     colors {
         background $bg-color
@@ -197,7 +197,7 @@ new_float normal
 # exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec --no-startup-id dunst
 
-bindsym $mod+d exec --no-startup-id rofi -show run
+bindsym $mod+d exec --no-startup-id rofi -combi-modi window#run#drun#ssh#keys -show drun -show-icons -theme solarized_alternate
 
 # Startup programs
 exec --no-startup-id nm-applet
@@ -214,6 +214,6 @@ bindsym $mod+Control+Right workspace next
 # Audio and spotify shortcuts
 bindsym $mod+mod1+Up exec "amixer -D pulse sset Master '5%+'"
 bindsym $mod+mod1+Down exec "amixer -D pulse sset Master '5%-'"
-bindsym $mod+mod1+p exec "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause" 
-bindsym $mod+mod1+Right exec "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next" 
+bindsym $mod+mod1+p exec "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause"
+bindsym $mod+mod1+Right exec "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next"
 bindsym $mod+mod1+Left exec "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous"
