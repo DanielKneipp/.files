@@ -80,10 +80,26 @@ config_vim () {
         && echo_succ "Dependencies for vim config installed" \
         || on_error "Failed to install dependencies for vim config"
 
-    git clone --depth=1 --recursive https://github.com/DanielKneipp/vimrc.git ~/.vim_runtime \
-        && sh ~/.vim_runtime/install_awesome_vimrc.sh \
-        && echo_succ "Vimrc downloaded and installed" \
-        || on_error "Failed to install vimrc"
+    # NOTE: in case there is a problem with vim-fugitive, run these commands:
+    #  - rm -r sources_non_forked/vim-fugitive/* to clean the plugin folder
+    #  - git submodule update --init --recursive to clone/update the plugin
+    # If the error error "RPC failed; curl 56 GnuTLS recv error (-24): Decryption has failed."
+    # happens, run the following (https://stackoverflow.com/a/46171246/4097211):
+    #  - git config --global http.postBuffer 1048576000
+
+    if [ "$(ls -A ~/.vim_runtime)" ]; then
+        pushd ~/.vim_runtime \
+            && git pull \
+            && git submodule update --init --recursive \
+            && popd \
+            && echo_succ "Vimrc downloaded and installed" \
+            || on_error "Failed to install vimrc"
+    else
+        git clone --depth=1 --recursive https://github.com/DanielKneipp/vimrc.git ~/.vim_runtime \
+            && sh ~/.vim_runtime/install_awesome_vimrc.sh \
+            && echo_succ "Vimrc downloaded and installed" \
+            || on_error "Failed to install vimrc"
+    fi
 
     echo_info "Vim configured"
 }
@@ -323,9 +339,8 @@ inst_all () {
 
 # Only config the programs
 main () {
-    inst_fish
-    config_fish
-    config_tmux
+    inst_all
+    config_all
 }
 
 main
